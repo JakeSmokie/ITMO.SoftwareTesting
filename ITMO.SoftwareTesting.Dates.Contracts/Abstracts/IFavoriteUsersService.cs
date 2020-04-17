@@ -4,9 +4,10 @@ using ITMO.SoftwareTesting.Dates.Contracts.Models;
 
 namespace ITMO.SoftwareTesting.Dates.Contracts.Abstracts
 {
-    public interface IEventsRepository
+    public interface IFavoriteUsersService
     {
-        Task<List<IntegrationEvent>> Events();
-        Task<List<IntegrationEventDetails>> EventDetails();
+        Task Add(int userId);
+        Task Remove(int userId);
+        Task<List<PersonFavorite>> List();
     }
 }

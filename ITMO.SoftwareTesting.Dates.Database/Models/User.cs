@@ -11,6 +11,7 @@ namespace ITMO.SoftwareTesting.Dates.Database.Models
 
         public List<UserAtGroup> Groups { get; set; }
         public List<GroupInvitation> Invitations { get; set; }
-        public List<FavoriteUser> Favorites { get; set; }
+        public List<FavoriteUser> FavoriteUsers { get; set; }
+        public List<FavoriteEvent> FavoriteEvents { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ITMO.SoftwareTesting.Dates.Database.Configuration
 
             builder
                 .HasOne(x => x.First)
-                .WithMany(x => x.Favorites)
+                .WithMany(x => x.FavoriteUsers)
                 .HasForeignKey(x => x.FirstUserId);
 
             builder

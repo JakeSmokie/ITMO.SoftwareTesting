@@ -8,27 +8,27 @@ using Xunit;
 
 namespace ITMO.SoftwareTesting.Dates.Tests.Tests
 {
-    public class FavoritesTests
+    public class FavoriteUsersTests
     {
         private readonly TestUserContext firstContext;
-        private readonly IFavoritesService firstFavorites;
+        private readonly IFavoriteUsersService firstFavoriteUsers;
         private readonly IAuthenticationService firstAuth;
 
         private readonly TestUserContext secondContext;
-        private readonly IFavoritesService secondFavorites;
+        private readonly IFavoriteUsersService secondFavoriteUsers;
         private readonly IAuthenticationService secondAuth;
 
 
-        public FavoritesTests()
+        public FavoriteUsersTests()
         {
             var dbContextFactory = new InMemoryDbContextFactory();
 
             firstContext = new TestUserContext();
-            firstFavorites = new FavoritesService(firstContext, dbContextFactory);
+            firstFavoriteUsers = new FavoriteUsersService(firstContext, dbContextFactory);
             firstAuth = new AuthenticationService(firstContext, dbContextFactory);
 
             secondContext = new TestUserContext();
-            secondFavorites = new FavoritesService(secondContext, dbContextFactory);
+            secondFavoriteUsers = new FavoriteUsersService(secondContext, dbContextFactory);
             secondAuth = new AuthenticationService(secondContext, dbContextFactory);
         }
 
@@ -38,13 +38,13 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             await firstContext.CreateUser(firstAuth);
             await secondContext.CreateUser(secondAuth, "SecondFellow");
 
-            var firstState = await firstFavorites.List();
-            await firstFavorites.Add(secondContext.UserId);
+            var firstState = await firstFavoriteUsers.List();
+            await firstFavoriteUsers.Add(secondContext.UserId);
 
-            var secondState = await firstFavorites.List();
-            await firstFavorites.Remove(secondContext.UserId);
+            var secondState = await firstFavoriteUsers.List();
+            await firstFavoriteUsers.Remove(secondContext.UserId);
 
-            var thirdState = await firstFavorites.List();
+            var thirdState = await firstFavoriteUsers.List();
             
             Assert.Empty(firstState);
             Assert.Single(secondState);
@@ -56,7 +56,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
         public async Task FavoritesDeletionIsSuppressedOnInvalidInput()
         {
             await firstContext.CreateUser(firstAuth);
-            await firstFavorites.Remove(200);
+            await firstFavoriteUsers.Remove(200);
         }
     }
 }

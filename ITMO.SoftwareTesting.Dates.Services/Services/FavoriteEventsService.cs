@@ -2,19 +2,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITMO.SoftwareTesting.Dates.Contracts.Abstracts;
-using ITMO.SoftwareTesting.Dates.Contracts.Models;
 using ITMO.SoftwareTesting.Dates.Database.Abstracts;
 using ITMO.SoftwareTesting.Dates.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITMO.SoftwareTesting.Dates.Services.Services
 {
-    public class FavoritesService : IFavoritesService
+    public class FavoriteEventsService : IFavoriteEventsService
     {
         private readonly IUserContext userContext;
         private readonly IDbContextFactory dbContextFactory;
 
-        public FavoritesService(
+        public FavoriteEventsService(
             IUserContext userContext,
             IDbContextFactory dbContextFactory
         )
@@ -23,56 +22,52 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             this.dbContextFactory = dbContextFactory;
         }
 
-        public async Task Add(int userId)
+        public async Task Add(int eventId)
         {
             await using var context = dbContextFactory.Create();
             await using var transaction = await context.Database.BeginTransactionAsync();
 
-            context.FavoriteUsers.Add(new FavoriteUser
+            context.FavoriteEvents.Add(new FavoriteEvent
             {
-                FirstUserId = userContext.UserId,
-                SecondUserId = userId,
+                UserId = userContext.UserId,
+                EventId = eventId
             });
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
 
-        public async Task Remove(int userId)
+        public async Task Remove(int eventId)
         {
             await using var context = dbContextFactory.Create();
             await using var transaction = await context.Database.BeginTransactionAsync();
 
-            var favoriteUser = await context.FavoriteUsers
-                .Where(x => x.FirstUserId == userContext.UserId)
-                .Where(x => x.SecondUserId == userId)
+            var @event = await context.FavoriteEvents
+                .Where(x => x.UserId == userContext.UserId)
+                .Where(x => x.EventId == eventId)
                 .FirstOrDefaultAsync();
 
-            if (favoriteUser == null)
+            if (@event == null)
             {
                 return;
             }
 
-            context.FavoriteUsers.Remove(favoriteUser);
+            context.Remove(@event);
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
 
-        public async Task<List<PersonFavorite>> List()
+        public async Task<List<int>> List()
         {
             await using var context = dbContextFactory.Create();
 
-            var favorites = await context.FavoriteUsers
-                .Where(x => x.FirstUserId == userContext.UserId)
-                .Select(x => new PersonFavorite
-                {
-                    Id = x.Second.Id,
-                    Nickname = x.Second.Nickname
-                })
+            var events = await context.FavoriteEvents
+                .Where(x => x.UserId == userContext.UserId)
+                .Select(x => x.EventId)
                 .ToListAsync();
 
-            return favorites;
+            return events;
         }
     }
 }

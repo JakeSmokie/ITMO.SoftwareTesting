@@ -14,6 +14,7 @@ namespace ITMO.SoftwareTesting.Dates.Database
         public DbSet<UserAtGroup> UsersAtGroups { get; set; }
         public DbSet<GroupInvitation> GroupInvitations { get; set; }
         public DbSet<FavoriteUser> FavoriteUsers { get; set; }
+        public DbSet<FavoriteEvent> FavoriteEvents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
