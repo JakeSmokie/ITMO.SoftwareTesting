@@ -4,10 +4,10 @@ using ITMO.SoftwareTesting.Dates.Contracts.Models;
 
 namespace ITMO.SoftwareTesting.Dates.Contracts.Abstracts
 {
-    public interface IPersonFavoritesService
+    public interface IFavoritesService
     {
-        Task AddInFavorites(string id);
-        Task RemoveFromFavorites(string id);
-        Task<List<PersonFavoritesListItem>> List();
+        Task Add(int userId);
+        Task Remove(int userId);
+        Task<List<PersonFavorite>> List();
     }
 }

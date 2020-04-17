@@ -3,6 +3,7 @@ using ITMO.SoftwareTesting.Dates.Contracts.Abstracts;
 using ITMO.SoftwareTesting.Dates.Contracts.Exceptions;
 using ITMO.SoftwareTesting.Dates.Services.Services;
 using ITMO.SoftwareTesting.Dates.Services.Tools;
+using ITMO.SoftwareTesting.Dates.Tests.Extensions;
 using ITMO.SoftwareTesting.Dates.Tests.Utils;
 using Xunit;
 
@@ -116,7 +117,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
         [InlineData("Vasya", "OkDude123")]
         public async Task AccountDeletionWorks(string nickname, string password)
         {
-            userContext.UseToken(await authenticationService.SignUp(nickname, password));
+            await userContext.CreateUser(authenticationService, nickname, password);
 
             var exception = await Assert.ThrowsAsync<DatesException>(async () =>
             {
@@ -131,7 +132,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
         [InlineData("Vasya", "OkDude123", "123123123")]
         public async Task AccountDeletionFailsOnBadPassword(string nickname, string password, string badPassword)
         {
-            userContext.UseToken(await authenticationService.SignUp(nickname, password));
+            await userContext.CreateUser(authenticationService, nickname, password);
 
             var exception = await Assert.ThrowsAsync<DatesException>(async () =>
             {

@@ -17,6 +17,16 @@ namespace ITMO.SoftwareTesting.Dates.Database.Configuration
             builder
                 .Property(x => x.PasswordHash)
                 .IsRequired();
+
+            builder
+                .HasMany(x => x.Groups)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+
+            builder
+                .HasMany(x => x.Invitations)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

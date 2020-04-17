@@ -10,10 +10,13 @@ namespace ITMO.SoftwareTesting.Dates.Database
         }
 
         public DbSet<User> Users { get; set; }
-        
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<UserAtGroup> UsersAtGroups { get; set; }
+        public DbSet<GroupInvitation> GroupInvitations { get; set; }
+        public DbSet<FavoriteUser> FavoriteUsers { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
