@@ -21,12 +21,14 @@ namespace ITMO.SoftwareTesting.Dates.Database.Configuration
             builder
                 .HasMany(x => x.Groups)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .HasMany(x => x.Invitations)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

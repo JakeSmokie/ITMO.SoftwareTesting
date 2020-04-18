@@ -18,7 +18,8 @@ namespace ITMO.SoftwareTesting.Dates.Database.Configuration
             builder
                 .HasOne(x => x.Second)
                 .WithMany()
-                .HasForeignKey(x => x.SecondUserId);
+                .HasForeignKey(x => x.SecondUserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

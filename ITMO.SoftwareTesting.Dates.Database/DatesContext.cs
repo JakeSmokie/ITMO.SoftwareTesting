@@ -1,10 +1,28 @@
 using ITMO.SoftwareTesting.Dates.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace ITMO.SoftwareTesting.Dates.Database
 {
     public class DatesContext : DbContext
     {
+        private static readonly DbContextOptions<DatesContext> DbContextOptions =
+            new DbContextOptionsBuilder<DatesContext>()
+                .UseSqlServer(
+                    "Data Source=localhost,1433;" +
+                    "Database=Dates;" +
+                    "Trusted_Connection=True;" +
+                    "Integrated Security=false;" +
+                    "ConnectRetryCount=0;" +
+                    "User Id=sa;" +
+                    "Password=123456790abcDEF"
+                )
+                .Options;
+
+        public DatesContext() : base(DbContextOptions)
+        {
+        }
+
         public DatesContext(DbContextOptions options) : base(options)
         {
         }

@@ -1,52 +1,83 @@
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using ITMO.SoftwareTesting.Dates.Contracts.Abstracts;
+using ITMO.SoftwareTesting.Dates.Database.Abstracts;
+using ITMO.SoftwareTesting.Dates.Services.Services;
+using ITMO.SoftwareTesting.Datings.Database;
+using ITMO.SoftwareTesting.Datings.Filters;
+using ITMO.SoftwareTesting.Datings.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ITMO.SoftwareTesting.Datings
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            services.AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)));
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "itmo.softwaretesting.datings/dist";
+            });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.Authority = "https://localhost:5000";
+                options.Authority = null;
+                options.Audience = "Users";
+                options.SaveToken = false;
+
+                options.TokenValidationParameters.IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes("CompleteKickAssOmgThatIsSoBad"));
+
+                options.TokenValidationParameters.RequireAudience = false;
+                options.TokenValidationParameters.RequireSignedTokens = false;
+                options.TokenValidationParameters.ValidateLifetime = false;
+                options.TokenValidationParameters.ValidateIssuerSigningKey = false;
+                options.TokenValidationParameters.ValidateIssuer = false;
+                options.TokenValidationParameters.ValidateAudience = false;
+                options.TokenValidationParameters.SaveSigninToken = false;
+                options.TokenValidationParameters.ValidateTokenReplay = false;
+                options.TokenValidationParameters.RequireExpirationTime = false;
+                options.TokenValidationParameters.RequireSignedTokens = false;
+            });
+
+            services.AddAuthorization();
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<IUserContext>(r =>
+            {
+                var claimsPrincipal = r.GetService<IHttpContextAccessor>().HttpContext.User;
+                var claims = claimsPrincipal.Claims.ToList();
+                var userId = claims.SingleOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value ?? "0";
+
+                return new UserContext(int.Parse(userId));
+            });
+
+            services.AddSingleton<IDbContextFactory, DbContextFactory>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -57,14 +88,11 @@ namespace ITMO.SoftwareTesting.Datings
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "itmo.softwaretesting.datings";
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                 }
             });
         }

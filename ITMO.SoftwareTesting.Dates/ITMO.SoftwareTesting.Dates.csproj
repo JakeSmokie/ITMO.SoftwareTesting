@@ -14,7 +14,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,6 +23,26 @@
 		<Content Remove="$(SpaRoot)**" />
 		<None Remove="$(SpaRoot)**" />
 		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+		<None Remove="itmo.softwaretesting.datings\**" />
+		<Content Remove="itmo.softwaretesting.datings\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="itmo.softwaretesting.datings\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="itmo.softwaretesting.datings\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="itmo.softwaretesting.datings\package-lock.json" />
+	  <_ContentIncludedByDefault Remove="itmo.softwaretesting.datings\package.json" />
+	  <_ContentIncludedByDefault Remove="ClientApp\package-lock.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ITMO.SoftwareTesting.Dates.Services\ITMO.SoftwareTesting.Dates.Services.csproj" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
