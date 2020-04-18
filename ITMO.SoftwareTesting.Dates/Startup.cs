@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using AspNetCore.Proxy;
 using ITMO.SoftwareTesting.Dates.Contracts.Abstracts;
+using ITMO.SoftwareTesting.Dates.Contracts.Constants;
 using ITMO.SoftwareTesting.Dates.Database.Abstracts;
 using ITMO.SoftwareTesting.Dates.Services.Services;
 using ITMO.SoftwareTesting.Datings.Database;
@@ -22,15 +24,10 @@ namespace ITMO.SoftwareTesting.Datings
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)));
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "itmo.softwaretesting.datings/dist";
-            });
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.Authority = "https://localhost:5000";
+                options.Authority = "http://localhost:5000";
                 options.Authority = null;
                 options.Audience = "Users";
                 options.SaveToken = false;
@@ -50,8 +47,19 @@ namespace ITMO.SoftwareTesting.Datings
                 options.TokenValidationParameters.RequireSignedTokens = false;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
+            });
+            
             services.AddAuthorization();
             services.AddHttpContextAccessor();
+            services.AddHttpClient(HttpClients.ProxyClient);
 
             services.AddScoped<IUserContext>(r =>
             {
@@ -75,6 +83,7 @@ namespace ITMO.SoftwareTesting.Datings
                 app.UseSpaStaticFiles();
             }
 
+            app.UseCors();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -86,15 +95,11 @@ namespace ITMO.SoftwareTesting.Datings
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "itmo.softwaretesting.datings";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
-                }
-            });
+            app.UseProxy(
+                $"/kudago/{{**path}}",
+                (context, args) => $"https://kudago.com/public-api/v1.4/{args["path"]}{context.Request.QueryString}",
+                ProxyOptions.Instance.WithHttpClientName(HttpClients.ProxyClient)
+            );
         }
     }
 }

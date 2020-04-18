@@ -2,10 +2,14 @@
 	<b-container class="px-4 mw-100 text-center">
 		<b-container class="d-flex py-4" v-if="$router.currentRoute.name !== 'auth'">
 			<b-nav tabs align="right" class="w-100 mx-3">
-				<b-nav-item active>👪 Группы</b-nav-item>
-				<b-nav-item>👀 Люди</b-nav-item>
-				<b-nav-item>🎫 События</b-nav-item>
-				<b-nav-item>🏫 Места</b-nav-item>
+				<b-nav-item
+					v-for="link in nav"
+					:key="link.link"
+					:active="$router.currentRoute.fullPath === link.link"
+					:to="link.link"
+				>
+					{{ link.title }}
+				</b-nav-item>
 			</b-nav>
 
 			<b-button-group class="ml-auto">
@@ -33,6 +37,12 @@
 
 		data: () => ({
 			nickname: '',
+			nav: [
+				{link: '/groups', title: '👪 Группы'},
+				{link: '/people', title: '👀 Люди'},
+				{link: '/events', title: '🎫 События'},
+				{link: '/places', title: '🏫 Места'},
+			],
 		}),
 
 		updated() {
