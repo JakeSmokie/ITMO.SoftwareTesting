@@ -10,8 +10,18 @@
 </template>
 
 <script>
+	import {mapActions} from 'vuex';
+
 	export default {
 		name: 'MainEventsPage',
+
+		async created() {
+			await this.loadFavoriteEvents();
+		},
+
+		methods: {
+			...mapActions('events/favorites', ['loadFavoriteEvents']),
+		}
 	};
 </script>
 

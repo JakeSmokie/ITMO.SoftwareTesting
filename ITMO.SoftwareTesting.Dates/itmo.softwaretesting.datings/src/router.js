@@ -5,9 +5,10 @@ import AuthPage from './views/AuthPage';
 import {token} from './tools/token';
 import GroupsPage from './views/GroupsPage';
 import UserPage from './views/UserPage';
-import EventsPage from './views/EventsPage';
-import FavoritesEventsPage from './views/FavoritesEventsPage';
-import MainEventsPage from './views/MainEventsPage';
+import AllEventsPage from './views/events/AllEventsPage';
+import FavoritesEventsPage from './views/events/FavoritesEventsPage';
+import MainEventsPage from './views/events/MainEventsPage';
+import MainHomePage from './views/MainHomePage';
 
 Vue.use(Router);
 
@@ -29,12 +30,13 @@ export default new Router({
 				}
 			},
 			children: [
+				route('', MainHomePage),
 				route('groups', GroupsPage),
 				route('user', UserPage),
 				{
 					path: 'events', component: MainEventsPage,
 					children: [
-						{path: '', component: EventsPage, name: 'events'},
+						{path: '', component: AllEventsPage, name: 'events'},
 						{path: 'favorites', component: FavoritesEventsPage, name: 'favorites'},
 					]
 				},

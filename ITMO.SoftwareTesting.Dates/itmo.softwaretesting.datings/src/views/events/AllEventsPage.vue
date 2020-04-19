@@ -26,9 +26,8 @@
 				</b-list-group>
 			</b-col>
 			<b-col>
-				<template v-if="eventDetails">
-					<event-details :event-details="eventDetails" :favorites="favorites" />
-<!--					v-on:movedfavorite="" -->
+				<template v-if="selectedEventDetails">
+					<event-details :event-details="selectedEventDetails"/>
 				</template>
 				<b-spinner v-else class="mt-5"/>
 			</b-col>
@@ -38,9 +37,8 @@
 </template>
 
 <script>
-	import {eventCategories, eventDetails, events, locations, placeDetails} from '../services/kudago.service';
-	import EventDetails from './EventDetails';
-	import {favoriteEvents} from '../services/favorite-events.service';
+	import EventDetails from '../../components/EventDetails';
+	import {mapActions, mapState} from 'vuex';
 
 	const itemToOption = x => ({
 		value: x.slug,
@@ -48,46 +46,34 @@
 	});
 
 	export default {
-		name: 'EventsPage',
+		name: 'AllEventsPage',
 		components: {EventDetails},
 		data: () => ({
-			eventCategories: [],
-			locations: [],
-			events: [],
 			selectedCategory: null,
 			selectedLocation: null,
-			selectedEvent: null,
-			eventDetails: null,
-			favorites: [],
 		}),
 
 		async created() {
-			this.eventCategories = await eventCategories();
-			this.locations = await locations();
-			this.favorites = await favoriteEvents();
+			await this.loadLocations();
+			await this.loadEventCategories();
 
 			await this.updateEvents();
 		},
 
 		methods: {
+			...mapActions('events', ['loadEvents', 'selectEvent']),
+			...mapActions('kudago', ['loadEventCategories', 'loadLocations']),
+
 			async updateEvents() {
-				this.events = await events(this.selectedLocation, this.selectedCategory);
+				await this.loadEvents([this.selectedCategory, this.selectedLocation]);
 				await this.selectEvent((this.events[0] || {}).id);
-			},
-
-			async selectEvent(eventId) {
-				this.selectedEvent = eventId;
-				this.eventDetails = null;
-				this.eventDetails = await eventDetails(eventId);
-
-				const place = this.eventDetails.place || {};
-				if (place.id) {
-					this.eventDetails.place = await placeDetails(place.id);
-				}
 			},
 		},
 
 		computed: {
+			...mapState('events', ['events', 'selectedEvent', 'selectedEventDetails']),
+			...mapState('kudago', ['locations', 'eventCategories']),
+
 			categoriesOptions() {
 				return this.eventCategories.map(itemToOption);
 			},
