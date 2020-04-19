@@ -26,38 +26,21 @@
 				</b-list-group>
 			</b-col>
 			<b-col>
-				<b-card
-					v-if="eventDetails"
-					:title="eventDetails.title"
-					:sub-title="eventDetails.tagline"
-					:img-src="eventDetails.images[0].image"
-					img-alt="Image"
-					img-top
-				>
-					<h6 v-for="date in eventDetails.dates">
-						{{ new Date(date.start * 1000 + 10800000).toLocaleString('ru-RU') }}
-						–
-						{{ new Date(date.end * 1000 + 10800000).toLocaleString('ru-RU') }}
-					</h6>
-
-					<template v-if="eventDetails.place">
-						<div v-if="eventDetails.place.title" class="py-2">
-							<span>{{ eventDetails.place.title }}</span> <br>
-							<span>{{ eventDetails.place.address }}, {{ eventDetails.place.subway }}</span>
-						</div>
-						<b-spinner variant="success" small v-else/>
-					</template>
-
-					<b-card-text class="text-justify" v-html="eventDetails.description"/>
-					<b-card-text class="text-justify" v-html="eventDetails.body_text"/>
-				</b-card>
+				<template v-if="eventDetails">
+					<event-details :event-details="eventDetails" :favorites="favorites" />
+<!--					v-on:movedfavorite="" -->
+				</template>
+				<b-spinner v-else class="mt-5"/>
 			</b-col>
 		</b-row>
+		<b-spinner v-else class="mt-5"/>
 	</b-container>
 </template>
 
 <script>
 	import {eventCategories, eventDetails, events, locations, placeDetails} from '../services/kudago.service';
+	import EventDetails from './EventDetails';
+	import {favoriteEvents} from '../services/favorite-events.service';
 
 	const itemToOption = x => ({
 		value: x.slug,
@@ -66,7 +49,7 @@
 
 	export default {
 		name: 'EventsPage',
-
+		components: {EventDetails},
 		data: () => ({
 			eventCategories: [],
 			locations: [],
@@ -75,11 +58,13 @@
 			selectedLocation: null,
 			selectedEvent: null,
 			eventDetails: null,
+			favorites: [],
 		}),
 
 		async created() {
 			this.eventCategories = await eventCategories();
 			this.locations = await locations();
+			this.favorites = await favoriteEvents();
 
 			await this.updateEvents();
 		},
@@ -87,14 +72,17 @@
 		methods: {
 			async updateEvents() {
 				this.events = await events(this.selectedLocation, this.selectedCategory);
+				await this.selectEvent((this.events[0] || {}).id);
 			},
 
 			async selectEvent(eventId) {
 				this.selectedEvent = eventId;
+				this.eventDetails = null;
 				this.eventDetails = await eventDetails(eventId);
 
-				if (this.eventDetails.place.id) {
-					this.eventDetails.place = await placeDetails(this.eventDetails.place.id);
+				const place = this.eventDetails.place || {};
+				if (place.id) {
+					this.eventDetails.place = await placeDetails(place.id);
 				}
 			},
 		},
@@ -111,6 +99,3 @@
 	};
 </script>
 
-<style scoped>
-
-</style>

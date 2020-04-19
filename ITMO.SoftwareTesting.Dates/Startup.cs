@@ -72,6 +72,7 @@ namespace ITMO.SoftwareTesting.Datings
 
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IFavoriteEventsService, FavoriteEventsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

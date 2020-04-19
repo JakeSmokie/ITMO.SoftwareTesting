@@ -13,11 +13,11 @@
 			</b-nav>
 
 			<b-button-group class="ml-auto">
-				<b-button variant="outline-secondary" class="px-4" to="/user">
+				<b-button variant="outline-secondary" to="/user" class="py-2 px-4">
 					{{ nickname }}
 				</b-button>
 
-				<b-button type="sm" variant="outline-danger" v-on:click="deleteToken">
+				<b-button variant="outline-danger" v-on:click="deleteToken">
 					Выйти
 				</b-button>
 			</b-button-group>
