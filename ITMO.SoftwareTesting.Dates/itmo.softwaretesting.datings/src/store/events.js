@@ -1,4 +1,4 @@
-import {eventDetails, events, placeDetails} from '../services/kudago.service';
+import {eventDetails, listEvents, placeDetails} from '../services/kudago.service';
 
 export const eventsModule = {
 	namespaced: true,
@@ -38,8 +38,11 @@ export const eventsModule = {
 			commit('setEventDetails', details);
 		},
 
-		async loadEvents({commit}, [category, location] = []) {
-			commit('loadEvents', await events(location, category));
+		async loadEvents({commit, dispatch}, [category, location] = []) {
+			const events = await listEvents(location, category);
+
+			commit('loadEvents', events);
+			await dispatch('selectEvent', events[0].id);
 		},
 	},
 };

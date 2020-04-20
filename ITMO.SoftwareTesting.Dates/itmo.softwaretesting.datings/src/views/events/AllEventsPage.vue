@@ -37,7 +37,7 @@
 </template>
 
 <script>
-	import EventDetails from '../../components/EventDetails';
+	import EventDetails from '../../components/events/EventDetails';
 	import {mapActions, mapState} from 'vuex';
 
 	const itemToOption = x => ({
@@ -53,16 +53,8 @@
 			selectedLocation: null,
 		}),
 
-		async created() {
-			await this.loadLocations();
-			await this.loadEventCategories();
-
-			await this.updateEvents();
-		},
-
 		methods: {
 			...mapActions('events', ['loadEvents', 'selectEvent']),
-			...mapActions('kudago', ['loadEventCategories', 'loadLocations']),
 
 			async updateEvents() {
 				await this.loadEvents([this.selectedCategory, this.selectedLocation]);

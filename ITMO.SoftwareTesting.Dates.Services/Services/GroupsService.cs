@@ -32,6 +32,7 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
                     Id = x.Group.Id,
                     Name = x.Group.Name,
                     Purpose = x.Group.Purpose,
+                    Owner = x.Group.OwnerUserId == userContext.UserId,
                 })
                 .ToListAsync();
 
@@ -119,6 +120,7 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
                     Id = x.User.Id,
                     Nickname = x.User.Nickname,
                     Invited = false,
+                    Me = x.UserId == userContext.UserId,
                 })
                 .ToListAsync();
 

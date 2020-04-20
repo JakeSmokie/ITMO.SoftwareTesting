@@ -16,11 +16,17 @@
 		name: 'MainEventsPage',
 
 		async created() {
+			await this.loadLocations();
+			await this.loadEventCategories();
+			await this.loadEvents([]);
+			await this.loadFavoriteEventsDetails();
 			await this.loadFavoriteEvents();
 		},
 
 		methods: {
-			...mapActions('events/favorites', ['loadFavoriteEvents']),
+			...mapActions('events/favorites', ['loadFavoriteEvents', 'loadFavoriteEventsDetails']),
+			...mapActions('kudago', ['loadEventCategories', 'loadLocations']),
+			...mapActions('events', ['loadEvents', 'selectEvent']),
 		}
 	};
 </script>

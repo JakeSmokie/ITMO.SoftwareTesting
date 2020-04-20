@@ -6,7 +6,7 @@ export const eventCategories = () =>
 export const locations = () =>
 	kudaGo.get('locations').then(x => x.data).then(x => [{name: ''}, ...x]);
 
-export const events = (location, category) => {
+export const listEvents = (location, category) => {
 	let url = 'events?';
 
 	if (location) {

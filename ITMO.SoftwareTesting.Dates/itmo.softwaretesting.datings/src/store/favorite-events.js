@@ -40,6 +40,7 @@ export const favoriteEventsModule = {
 
 	actions: {
 		async loadFavoriteEventsDetails({commit, state, dispatch}) {
+			commit('setFavoriteEventsDetails', []);
 			await dispatch('loadFavoriteEvents');
 
 			const details = [];
@@ -49,6 +50,7 @@ export const favoriteEventsModule = {
 			}
 
 			commit('setFavoriteEventsDetails', details);
+			commit('setSelectedEvent', state.favoriteEvents[0]);
 		},
 
 		async loadFavoriteEvents({commit}) {

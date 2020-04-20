@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using AspNetCore.Proxy;
@@ -73,6 +75,8 @@ namespace ITMO.SoftwareTesting.Datings
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IFavoriteEventsService, FavoriteEventsService>();
+            services.AddScoped<IGroupsService, GroupsService>();
+            services.AddScoped<IPersonsService, PersonsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

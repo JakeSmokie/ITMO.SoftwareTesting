@@ -28,18 +28,16 @@
 </template>
 
 <script>
-	import AuthPage from './views/AuthPage';
 	import {deleteToken, nickname} from './tools/token';
 
 	export default {
 		name: 'app',
-		components: {AuthPage},
 
 		data: () => ({
 			nickname: '',
 			nav: [
 				{link: '/groups', title: '👪 Группы'},
-				{link: '/people', title: '👀 Люди'},
+				// {link: '/people', title: '👀 Люди'},
 				{link: '/events', title: '🎫 События'},
 				{link: '/places', title: '🏫 Места'},
 			],

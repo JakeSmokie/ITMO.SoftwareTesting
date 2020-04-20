@@ -5,5 +5,6 @@ namespace ITMO.SoftwareTesting.Dates.Contracts.Models
         public int Id { get; set; }
         public string Nickname { get; set; }
         public bool Invited { get; set; }
+        public bool Me { get; set; }
     }
 }
