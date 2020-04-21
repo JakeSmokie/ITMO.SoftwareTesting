@@ -148,7 +148,7 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             return new GroupDetails
             {
                 Members = members,
-                Invitations = invitations,
+                Invites = invitations,
                 Events = events,
             };
         }

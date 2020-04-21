@@ -180,8 +180,8 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
 
             Assert.Single(invitations);
             Assert.Equal(groupId, invitations[0].Id);
-            Assert.Single(details.Invitations);
-            Assert.Equal(secondContext.UserId, details.Invitations[0].Id);
+            Assert.Single(details.Invites);
+            Assert.Equal(secondContext.UserId, details.Invites[0].Id);
         }
 
         [Fact]
