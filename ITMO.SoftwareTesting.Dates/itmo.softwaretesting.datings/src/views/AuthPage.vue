@@ -1,5 +1,7 @@
 <template>
 	<b-container class="d-flex flex-column align-items-center pt-5 main">
+		<h3 class="mb-5">Встречи, самые разные</h3>
+
 		<b-container class="auth-block">
 			<b-container>
 				<b-form-input
@@ -100,7 +102,7 @@
 				setToken(data);
 				setNickname(this.signUpForm.nickname);
 
-				await this.$router.push({name: 'home'});
+				await this.$router.push({name: 'main-home'});
 			},
 
 			async signIn() {
@@ -111,7 +113,7 @@
 				const {data} = await signIn(this.signInForm.nickname, this.signInForm.password);
 				setToken(data);
 				setNickname(this.signInForm.nickname);
-				await this.$router.push({name: 'home'});
+				await this.$router.push({name: 'main-home'});
 			},
 		},
 
@@ -138,6 +140,6 @@
 	}
 
 	.main {
-		margin-top: 80px;
+		margin-top: 40px;
 	}
 </style>

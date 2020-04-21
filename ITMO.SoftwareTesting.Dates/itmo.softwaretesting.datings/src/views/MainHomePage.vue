@@ -1,6 +1,6 @@
 <template>
 	<div>
-		Welcome aboard!
+		<h4>Добро пожаловать!</h4>
 	</div>
 </template>
 

@@ -20,7 +20,7 @@ export default new Router({
 	base: process.env.BASE_URL,
 	routes: [
 		{
-			path: '/',
+			path: '',
 			name: 'home',
 			component: Home,
 			beforeEnter: (from, to, next) => {
@@ -31,7 +31,7 @@ export default new Router({
 				}
 			},
 			children: [
-				route('', MainHomePage),
+				{path: '', component: MainHomePage, name: 'main-home'},
 				route('groups', GroupsPage),
 				route('user', UserPage),
 				route('dates', DatesPage),
