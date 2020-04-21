@@ -11,6 +11,7 @@
 					trim
 					class="mb-3"
 					v-on:keyup.enter="signIn"
+					id="sign-in-nickname"
 				></b-form-input>
 
 				<b-form-input
@@ -20,9 +21,13 @@
 					class="mb-3"
 					type="password"
 					v-on:keyup.enter="signIn"
+					id="sign-in-password"
 				></b-form-input>
 
-				<b-button variant="outline-primary" block :disabled="!validateSignInForm" v-on:click="signIn">
+				<b-button
+					variant="outline-primary" block :disabled="!validateSignInForm" v-on:click="signIn"
+					id="sign-in-button"
+				>
 					Войти
 				</b-button>
 			</b-container>
@@ -37,6 +42,7 @@
 					trim
 					class="my-3"
 					v-on:keyup.enter="signUp"
+					id="sign-up-nickname"
 				></b-form-input>
 
 				<b-form-input
@@ -46,6 +52,7 @@
 					class="my-3"
 					type="password"
 					v-on:keyup.enter="signUp"
+					id="sign-up-password"
 				></b-form-input>
 
 				<b-form-input
@@ -55,9 +62,15 @@
 					class="my-3"
 					type="password"
 					v-on:keyup.enter="signUp"
+					id="sign-up-confirmation"
 				></b-form-input>
 
-				<b-button variant="outline-primary" block :disabled="!validateSignUpForm" v-on:click="signUp">
+				<b-button
+					variant="outline-primary" block
+					:disabled="!validateSignUpForm"
+					v-on:click="signUp"
+					id="sign-up-button"
+				>
 					Зарегистрироваться
 				</b-button>
 			</b-container>

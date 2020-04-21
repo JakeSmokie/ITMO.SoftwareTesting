@@ -17,7 +17,7 @@
 					{{ nickname }}
 				</b-button>
 
-				<b-button variant="outline-danger" v-on:click="deleteToken">
+				<b-button variant="outline-danger" v-on:click="deleteToken" id="logout-button">
 					Выйти
 				</b-button>
 			</b-button-group>

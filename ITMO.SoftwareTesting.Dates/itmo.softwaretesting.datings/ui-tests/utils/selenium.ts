@@ -1,6 +1,8 @@
 import {Builder} from 'selenium-webdriver';
 
-export const createBrowser = () =>
+export const url = (url = '') => 'http://localhost:8080/' + url;
+
+export const createWebDriver = () =>
 	new Builder()
 		.forBrowser('chrome')
 		.usingServer('http://localhost:4444/wd/hub')

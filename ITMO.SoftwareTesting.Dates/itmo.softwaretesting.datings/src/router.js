@@ -40,7 +40,7 @@ export default new Router({
 					children: [
 						{path: '', component: AllEventsPage, name: 'events'},
 						{path: 'favorites', component: FavoritesEventsPage, name: 'favorites'},
-					]
+					],
 				},
 			],
 		},
