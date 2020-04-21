@@ -121,12 +121,12 @@
 
 		methods: {
 			...mapActions('groups', [
-				'upsertGroup', 'deleteGroup', 'loadGroupMembers', 'invitePersonInGroup', 'deletePersonFromGroup',
+				'upsertGroup', 'deleteGroup', 'loadGroupDetails', 'invitePersonInGroup', 'deletePersonFromGroup',
 			]),
 
 			async switchSpoiler() {
 				if (this.shown === null) {
-					await this.loadGroupMembers(this.group);
+					await this.loadGroupDetails(this.group);
 				}
 
 				this.shown = !this.shown;

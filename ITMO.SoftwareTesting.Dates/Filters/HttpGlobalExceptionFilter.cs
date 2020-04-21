@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Security;
 using System.Threading.Tasks;
@@ -31,17 +32,26 @@ namespace ITMO.SoftwareTesting.Datings.Filters
                     {
                         Instance = exceptionContext.HttpContext.Request.Path,
                         Status = (int) HttpStatusCode.BadRequest,
-                        Type = "hiyou/security-fault",
+                        Type = "security-fault",
                         Detail = e.Message,
                         Title = "Bad Request"
                     });
 
                     return;
                 default:
-                {
-                    exceptionContext.ExceptionHandled = false;
-                    break;
-                }
+                    SetProblemDetails(exceptionContext, new ProblemDetails
+                    {
+                        Instance = exceptionContext.HttpContext.Request.Path,
+                        Status = (int) HttpStatusCode.InternalServerError,
+                        Type = "error",
+                        Detail = exceptionContext.Exception.Message,
+                        Title = "Internal error"
+                    });
+
+                    logger.LogError("{message}", exceptionContext.Exception.Message);
+                    logger.LogError("{stacktrace}", exceptionContext.Exception.StackTrace);
+
+                    return;
             }
         }
 

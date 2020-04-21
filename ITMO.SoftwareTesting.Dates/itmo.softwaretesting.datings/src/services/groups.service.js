@@ -6,8 +6,8 @@ export const upsertGroup = (details) =>
 export const deleteGroup = id =>
 	http.delete(`api/groups/${id}`);
 
-export const groupMembers = id =>
-	http.get(`api/groups/${id}/members`).then(x => x.data);
+export const groupDetails = id =>
+	http.get(`api/groups/${id}/details`).then(x => x.data);
 
 export const listGroups = () =>
 	http.get('api/groups').then(x => x.data);

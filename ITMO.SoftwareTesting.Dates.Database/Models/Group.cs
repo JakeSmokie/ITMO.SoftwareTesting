@@ -13,5 +13,6 @@ namespace ITMO.SoftwareTesting.Dates.Database.Models
         public List<UserAtGroup> Users { get; set; }
         public User OwnerUser { get; set; }
         public List<GroupInvitation> Invitations { get; set; }
+        public List<EventAtGroup> Events { get; set; }
     }
 }

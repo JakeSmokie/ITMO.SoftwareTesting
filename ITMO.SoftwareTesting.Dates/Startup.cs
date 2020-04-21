@@ -77,6 +77,7 @@ namespace ITMO.SoftwareTesting.Datings
             services.AddScoped<IFavoriteEventsService, FavoriteEventsService>();
             services.AddScoped<IGroupsService, GroupsService>();
             services.AddScoped<IPersonsService, PersonsService>();
+            services.AddScoped<IDatesService, DatesService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

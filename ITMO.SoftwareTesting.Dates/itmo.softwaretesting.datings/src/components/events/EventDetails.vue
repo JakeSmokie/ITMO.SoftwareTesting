@@ -1,9 +1,16 @@
 <template>
-	<div>
+	<div v-if="eventDetails">
 		<div class="d-flex justify-content-end">
 			<b-button-group class="mb-3">
-				<b-button variant="success" v-if="!isFavorite" v-on:click="move(true)">Добавить в любимые</b-button>
-				<b-button variant="danger" v-else v-on:click="move(false)">Удалить из любимых</b-button>
+				<b-button
+					variant="outline-primary"
+					v-on:click="$bvModal.show('create-date-modal')"
+					v-if="availableGroups.length > 0"
+				>
+					Создать встречу
+				</b-button>
+				<b-button variant="outline-success" v-if="!isFavorite" v-on:click="move(true)">Добавить в любимые</b-button>
+				<b-button variant="outline-danger" v-else v-on:click="move(false)">Удалить из любимых</b-button>
 			</b-button-group>
 		</div>
 		<b-card
@@ -33,16 +40,17 @@
 	</div>
 </template>
 <script>
-	import {mapActions, mapState} from 'vuex';
+	import {mapActions, mapGetters, mapState} from 'vuex';
 
 	export default {
 		name: 'event-details',
-		props: {
-			eventDetails: {},
-		},
-
 		computed: {
-			...mapState('events/favorites', ['favoriteEvents']),
+			...mapState('events', ['favoriteEvents']),
+			...mapState('dates', ['dates']),
+			...mapGetters(['availableGroups']),
+			...mapGetters('events', {
+				eventDetails: 'selectedEventDetails',
+			}),
 
 			isFavorite() {
 				return (this.favoriteEvents || []).includes((this.eventDetails || {id: -1}).id);
@@ -50,7 +58,8 @@
 		},
 
 		methods: {
-			...mapActions('events/favorites', ['addFavoriteEvent', 'removeFavoriteEvent']),
+			...mapActions('events', ['addFavoriteEvent', 'removeFavoriteEvent']),
+			...mapActions('dates', ['createDate']),
 
 			async move(value) {
 				if (value) {

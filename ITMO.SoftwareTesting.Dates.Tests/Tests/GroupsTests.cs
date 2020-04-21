@@ -41,7 +41,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
 
             await firstContext.CreateUser(firstAuth);
 
-            var groupId = await firstGroups.UpsertGroup(new GroupDetails {Name = name, Purpose = purpose});
+            var groupId = await firstGroups.UpsertGroup(new Group {Name = name, Purpose = purpose});
             var group = (await firstGroups.List())[0];
 
             Assert.Equal(groupId, group.Id);
@@ -58,7 +58,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             await firstContext.CreateUser(firstAuth);
 
             var groupId = await firstGroups.UpsertGroup(DefaultGroup());
-            await firstGroups.UpsertGroup(new GroupDetails {Id = groupId, Name = name, Purpose = purpose});
+            await firstGroups.UpsertGroup(new Group {Id = groupId, Name = name, Purpose = purpose});
 
             var group = (await firstGroups.List())[0];
 
@@ -141,11 +141,11 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             await firstContext.CreateUser(firstAuth);
 
             var groupId = await firstGroups.UpsertGroup(DefaultGroup());
-            var members = await firstGroups.Members(groupId);
+            var details = await firstGroups.Details(groupId);
 
-            Assert.Single(members);
-            Assert.Equal(firstContext.UserId, members[0].Id);
-            Assert.False(members[0].Invited);
+            Assert.Single(details.Members);
+            Assert.Equal(firstContext.UserId, details.Members[0].Id);
+            Assert.False(details.Members[0].Invited);
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             var groupId = await firstGroups.UpsertGroup(DefaultGroup());
             var exception = await Assert.ThrowsAsync<DatesException>(async () =>
             {
-                await secondGroups.Members(groupId);
+                await secondGroups.Details(groupId);
             });
 
             Assert.Equal("You do not belong to this group", exception.Message);
@@ -175,13 +175,13 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             await firstGroups.InvitePerson(groupId, secondContext.UserId);
             await firstGroups.InvitePerson(groupId, secondContext.UserId);
 
-            var members = await firstGroups.Members(groupId);
+            var details = await firstGroups.Details(groupId);
             var invitations = await secondGroups.Invitations();
 
             Assert.Single(invitations);
             Assert.Equal(groupId, invitations[0].Id);
-            Assert.Equal(2, members.Count);
-            Assert.Contains(secondContext.UserId, members.Where(x => x.Invited).Select(x => x.Id));
+            Assert.Single(details.Invitations);
+            Assert.Equal(secondContext.UserId, details.Invitations[0].Id);
         }
 
         [Fact]
@@ -253,14 +253,14 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             await secondGroups.AcceptInvitation(groupId);
 
             var after = await secondGroups.Invitations();
-            var members = await secondGroups.Members(groupId);
+            var details = await secondGroups.Details(groupId);
             var groups = await secondGroups.List();
 
             Assert.Single(before);
             Assert.Equal(groupId, before[0].Id);
             Assert.Empty(after);
-            Assert.Contains(firstContext.UserId, members.Select(x => x.Id));
-            Assert.Contains(secondContext.UserId, members.Select(x => x.Id));
+            Assert.Contains(firstContext.UserId, details.Members.Select(x => x.Id));
+            Assert.Contains(secondContext.UserId, details.Members.Select(x => x.Id));
             Assert.Single(groups);
             Assert.Equal(groupId, groups[0].Id);
         }
@@ -325,9 +325,9 @@ namespace ITMO.SoftwareTesting.Dates.Tests.Tests
             Assert.Equal("No invitation found", exception.Message);
         }
 
-        private static GroupDetails DefaultGroup(int id = 0)
+        private static Group DefaultGroup(int id = 0)
         {
-            return new GroupDetails {Name = "", Purpose = "", Id = id};
+            return new Group {Name = "", Purpose = "", Id = id};
         }
     }
 }

@@ -1,10 +1,11 @@
+using System.Collections.Generic;
+
 namespace ITMO.SoftwareTesting.Dates.Contracts.Models
 {
     public class GroupDetails
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Purpose { get; set; }
-        public bool Owner { get; set; }
+        public List<PersonListItem> Members { get; set; }
+        public List<PersonListItem> Invitations { get; set; }
+        public List<int> Events { get; set; }
     }
 }

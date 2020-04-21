@@ -7,6 +7,7 @@ using ITMO.SoftwareTesting.Dates.Contracts.Models;
 using ITMO.SoftwareTesting.Dates.Database.Abstracts;
 using ITMO.SoftwareTesting.Dates.Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Group = ITMO.SoftwareTesting.Dates.Contracts.Models.Group;
 
 namespace ITMO.SoftwareTesting.Dates.Services.Services
 {
@@ -21,13 +22,13 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             this.userContext = userContext;
         }
 
-        public async Task<List<GroupDetails>> List()
+        public async Task<List<Group>> List()
         {
             await using var context = dbContextFactory.Create();
 
             var groups = await context.UsersAtGroups
                 .Where(x => x.UserId == userContext.UserId)
-                .Select(x => new GroupDetails
+                .Select(x => new Group
                 {
                     Id = x.Group.Id,
                     Name = x.Group.Name,
@@ -39,14 +40,14 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             return groups;
         }
 
-        public async Task<int> UpsertGroup(GroupDetails details)
+        public async Task<int> UpsertGroup(Group details)
         {
             await using var context = dbContextFactory.Create();
             await using var transaction = await context.Database.BeginTransactionAsync();
 
             if (details.Id == 0)
             {
-                var newGroup = new Group
+                var newGroup = new Database.Models.Group
                 {
                     Name = details.Name,
                     Purpose = details.Purpose,
@@ -109,7 +110,7 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             await transaction.CommitAsync();
         }
 
-        public async Task<List<PersonListItem>> Members(int groupId)
+        public async Task<GroupDetails> Details(int groupId)
         {
             await using var context = dbContextFactory.Create();
 
@@ -139,7 +140,17 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
                 })
                 .ToListAsync();
 
-            return members.Concat(invitations).ToList();
+            var events = await context.EventsAtGroups
+                .Where(x => x.GroupId == groupId)
+                .Select(x => x.EventId)
+                .ToListAsync();
+
+            return new GroupDetails
+            {
+                Members = members,
+                Invitations = invitations,
+                Events = events,
+            };
         }
 
         public async Task InvitePerson(int groupId, int userId)
@@ -223,13 +234,13 @@ namespace ITMO.SoftwareTesting.Dates.Services.Services
             await transaction.CommitAsync();
         }
 
-        public async Task<List<GroupDetails>> Invitations()
+        public async Task<List<Group>> Invitations()
         {
             await using var context = dbContextFactory.Create();
 
             var groups = await context.GroupInvitations
                 .Where(x => x.UserId == userContext.UserId)
-                .Select(x => new GroupDetails
+                .Select(x => new Group
                 {
                     Id = x.Group.Id,
                     Name = x.Group.Name,

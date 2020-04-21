@@ -9,6 +9,7 @@ import AllEventsPage from './views/events/AllEventsPage';
 import FavoritesEventsPage from './views/events/FavoritesEventsPage';
 import MainEventsPage from './views/events/MainEventsPage';
 import MainHomePage from './views/MainHomePage';
+import DatesPage from './views/DatesPage';
 
 Vue.use(Router);
 
@@ -33,6 +34,7 @@ export default new Router({
 				route('', MainHomePage),
 				route('groups', GroupsPage),
 				route('user', UserPage),
+				route('dates', DatesPage),
 				{
 					path: 'events', component: MainEventsPage,
 					children: [

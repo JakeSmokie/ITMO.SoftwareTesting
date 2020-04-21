@@ -3,14 +3,16 @@ using ITMO.SoftwareTesting.Dates.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITMO.SoftwareTesting.Dates.Database.Migrations
 {
     [DbContext(typeof(DatesContext))]
-    partial class DatesContextModelSnapshot : ModelSnapshot
+    [Migration("20200420172201_EventAtGroup")]
+    partial class EventAtGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

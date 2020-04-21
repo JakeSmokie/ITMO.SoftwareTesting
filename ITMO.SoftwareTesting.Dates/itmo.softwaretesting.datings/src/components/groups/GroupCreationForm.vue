@@ -1,6 +1,8 @@
 <template>
 	<b-card>
 		<div class="text-left">
+			<h4 class="mb-4">Новая группа</h4>
+
 			<b-form-group label="📖 Название" label-cols="2">
 				<b-input v-model="name"/>
 			</b-form-group>

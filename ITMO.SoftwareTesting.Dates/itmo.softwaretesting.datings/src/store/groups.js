@@ -3,7 +3,7 @@ import {
 	acceptInvitation,
 	deleteGroup,
 	deletePersonFromGroup,
-	groupMembers,
+	groupDetails,
 	invitePersonInGroup,
 	listGroupInvitations,
 	listGroups,
@@ -13,6 +13,10 @@ import {
 const state = {
 	groups: [],
 	invitations: [],
+};
+
+const getters = {
+	myGroups: state => state.groups.filter(x => x.owner),
 };
 
 const mutations = {
@@ -33,12 +37,13 @@ const mutations = {
 		state.groups = state.groups.filter(x => x.id !== id);
 	},
 
-	loadMembers(state, [group, members]) {
-		const newGroup = state.groups.find(x => x.id === group.id);
-		newGroup.members = members.filter(x => !x.invited);
-		newGroup.invites = members.filter(x => x.invited);
+	loadGroupDetails(state, [group, details]) {
+		const index = state.groups.findIndex(x => x.id === group.id);
 
-		state.groups = [...state.groups];
+		Vue.set(state.groups, index, {
+			...group,
+			...details,
+		});
 	},
 
 	invitePersonInGroup(state, {userId, userNickname, group}) {
@@ -90,8 +95,8 @@ const actions = {
 		commit(mutations.setGroups.name, await listGroups());
 	},
 
-	async loadGroupMembers({commit}, group) {
-		commit(mutations.loadMembers.name, [group, await groupMembers(group.id)]);
+	async loadGroupDetails({commit}, group) {
+		commit(mutations.loadGroupDetails.name, [group, await groupDetails(group.id)]);
 	},
 
 	async invitePersonInGroup({commit}, {userId, userNickname, group}) {
@@ -107,7 +112,7 @@ const actions = {
 		await acceptInvitation(group.id);
 		commit(mutations.acceptInvitation.name, group);
 
-		await dispatch(actions.loadGroupMembers.name, group);
+		await dispatch(actions.loadGroupDetails.name, group);
 	},
 
 	async deletePersonFromGroup({commit}, {group, user}) {
@@ -121,4 +126,5 @@ export const groupsModule = {
 	state,
 	mutations,
 	actions,
+	getters,
 };

@@ -30,6 +30,7 @@ namespace ITMO.SoftwareTesting.Dates.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<UserAtGroup> UsersAtGroups { get; set; }
+        public DbSet<EventAtGroup> EventsAtGroups { get; set; }
         public DbSet<GroupInvitation> GroupInvitations { get; set; }
         public DbSet<FavoriteUser> FavoriteUsers { get; set; }
         public DbSet<FavoriteEvent> FavoriteEvents { get; set; }

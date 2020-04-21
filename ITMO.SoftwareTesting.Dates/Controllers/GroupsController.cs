@@ -21,13 +21,13 @@ namespace ITMO.SoftwareTesting.Datings.Controllers
 
         [HttpPost]
         [Route("upsert")]
-        public Task<int> UpsertGroup(GroupDetails details)
+        public Task<int> UpsertGroup(Group details)
         {
             return groupsService.UpsertGroup(details);
         }
 
         [HttpGet]
-        public Task<List<GroupDetails>> List()
+        public Task<List<Group>> List()
         {
             return groupsService.List();
         }
@@ -40,10 +40,10 @@ namespace ITMO.SoftwareTesting.Datings.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/members")]
-        public Task<List<PersonListItem>> Members(int id)
+        [Route("{id}/details")]
+        public Task<GroupDetails> Details(int id)
         {
-            return groupsService.Members(id);
+            return groupsService.Details(id);
         }
 
         [HttpPost]
@@ -62,7 +62,7 @@ namespace ITMO.SoftwareTesting.Datings.Controllers
 
         [HttpGet]
         [Route("invitations")]
-        public Task<List<GroupDetails>> Invitations()
+        public Task<List<Group>> Invitations()
         {
             return groupsService.Invitations();
         }

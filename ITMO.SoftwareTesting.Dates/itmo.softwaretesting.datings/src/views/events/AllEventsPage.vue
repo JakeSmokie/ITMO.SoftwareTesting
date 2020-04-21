@@ -17,7 +17,7 @@
 					<b-list-group-item
 						v-for="event in events" :key="event.id"
 						href="#"
-						class="text-wrap"
+						class="text-wrap text-left"
 						v-on:click="selectEvent(event.id)"
 						:active="selectedEvent === event.id"
 					>
@@ -27,7 +27,7 @@
 			</b-col>
 			<b-col>
 				<template v-if="selectedEventDetails">
-					<event-details :event-details="selectedEventDetails"/>
+					<event-details/>
 				</template>
 				<b-spinner v-else class="mt-5"/>
 			</b-col>
@@ -38,7 +38,7 @@
 
 <script>
 	import EventDetails from '../../components/events/EventDetails';
-	import {mapActions, mapState} from 'vuex';
+	import {mapActions, mapGetters, mapState} from 'vuex';
 
 	const itemToOption = x => ({
 		value: x.slug,
@@ -63,8 +63,9 @@
 		},
 
 		computed: {
-			...mapState('events', ['events', 'selectedEvent', 'selectedEventDetails']),
+			...mapState('events', ['events', 'selectedEvent']),
 			...mapState('kudago', ['locations', 'eventCategories']),
+			...mapGetters('events', ['selectedEventDetails']),
 
 			categoriesOptions() {
 				return this.eventCategories.map(itemToOption);

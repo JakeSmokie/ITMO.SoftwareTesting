@@ -6,17 +6,17 @@ namespace ITMO.SoftwareTesting.Dates.Contracts.Abstracts
 {
     public interface IGroupsService
     {
-        Task<List<GroupDetails>> List();
+        Task<List<Group>> List();
 
-        Task<int> UpsertGroup(GroupDetails details);
+        Task<int> UpsertGroup(Group details);
         Task DeleteGroup(int groupId);
 
-        Task<List<PersonListItem>> Members(int groupId);
+        Task<GroupDetails> Details(int groupId);
 
         Task InvitePerson(int groupId, int userId);
         Task DeletePerson(int groupId, int userId);
 
-        Task<List<GroupDetails>> Invitations();
+        Task<List<Group>> Invitations();
         Task AcceptInvitation(int groupId);
     }
 }
