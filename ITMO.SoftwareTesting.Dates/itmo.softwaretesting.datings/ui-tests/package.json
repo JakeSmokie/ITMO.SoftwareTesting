@@ -1,0 +1,28 @@
+{
+  "name": "ui-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest -i",
+    "selenium": "node ./node_modules/.bin/selenium-standalone start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/selenium-webdriver": "^4.0.9",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@types/jest": "^25.2.1",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.4.0",
+    "jest": "^25.4.0",
+    "selenium-standalone": "^6.17.0",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  }
+}
