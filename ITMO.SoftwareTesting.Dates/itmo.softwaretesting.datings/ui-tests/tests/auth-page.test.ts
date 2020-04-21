@@ -2,6 +2,8 @@ import { createWebDriver, url } from '../utils/selenium';
 import { until, WebDriver } from 'selenium-webdriver';
 import { toastText, ts } from '../utils/utils';
 import {
+	accountDeletionButton,
+	accountDeletionPassword,
 	logout,
 	signIn,
 	signInButton,
@@ -12,6 +14,7 @@ import {
 	signUpNickname,
 	signUpPassword,
 	trySignIn,
+	userPageButton,
 } from '../algorithms/auth';
 
 describe('auth page', () => {
@@ -100,6 +103,35 @@ describe('auth page', () => {
 
 	it('should not allow sign in on short password', async () => {
 		await assertSignInIsNotAvailable(browser, 'Some cool dude', '123');
+	});
+
+
+	it('should provide account deletion', async () => {
+		const nickname = ts('Nickname');
+		const password = 'password_123';
+
+		await signUp(browser, nickname, password);
+		await userPageButton(browser).click();
+
+		await browser.wait(until.urlIs(url('user')));
+		await accountDeletionPassword(browser).sendKeys(password);
+
+		await accountDeletionButton(browser).click();
+		await browser.wait(until.urlIs(url('auth')));
+
+		await trySignIn(browser, nickname, password);
+		expect(await toastText(browser)).toBe('No such user was found');
+	});
+
+	it('should not allow to delete an account on wrong password', async () => {
+		await signUp(browser, ts('Nickname'), 'password_123');
+		await userPageButton(browser).click();
+
+		await browser.wait(until.urlIs(url('user')));
+		await accountDeletionPassword(browser).sendKeys('123');
+		await accountDeletionButton(browser).click();
+
+		expect(await toastText(browser)).toBe('Incorrect password');
 	});
 });
 

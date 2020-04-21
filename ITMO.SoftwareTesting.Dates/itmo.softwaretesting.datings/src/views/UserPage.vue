@@ -6,10 +6,11 @@
 				placeholder="Пароль"
 				type="password"
 				trim
-			></b-form-input>
+				id="account-deletion-password"
+			/>
 
 			<b-input-group-append>
-				<b-button variant="danger" v-on:click="deleteAccount()">
+				<b-button variant="danger" v-on:click="deleteAccount()" id="account-deletion-button">
 					Удалить аккаунт
 				</b-button>
 			</b-input-group-append>

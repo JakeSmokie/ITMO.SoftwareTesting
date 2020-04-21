@@ -3,16 +3,19 @@ import { By, until, WebDriver } from 'selenium-webdriver';
 import { token } from '../utils/utils';
 
 export const logoutButton = (browser: WebDriver) => browser.findElement(By.id('logout-button'));
-export const userPageButton = (browser: WebDriver) => browser.findElement(By.id('user-page-button'));
-
 export const signInNickname = (browser: WebDriver) => browser.findElement(By.id('sign-in-nickname'));
+
 export const signInPassword = (browser: WebDriver) => browser.findElement(By.id('sign-in-password'));
 export const signInButton = (browser: WebDriver) => browser.findElement(By.id('sign-in-button'));
-
 export const signUpNickname = (browser: WebDriver) => browser.findElement(By.id('sign-up-nickname'));
+
 export const signUpPassword = (browser: WebDriver) => browser.findElement(By.id('sign-up-password'));
 export const signUpConfirmation = (browser: WebDriver) => browser.findElement(By.id('sign-up-confirmation'));
 export const signUpButton = (browser: WebDriver) => browser.findElement(By.id('sign-up-button'));
+
+export const userPageButton = (browser: WebDriver) => browser.findElement(By.id('user-page-button'));
+export const accountDeletionPassword = (browser: WebDriver) => browser.findElement(By.id('account-deletion-password'));
+export const accountDeletionButton = (browser: WebDriver) => browser.findElement(By.id('account-deletion-button'));
 
 export const signUp = async (browser: WebDriver, nickname: string, password: string) => {
 	await browser.get(url());
