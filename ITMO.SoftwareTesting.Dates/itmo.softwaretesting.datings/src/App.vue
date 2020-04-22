@@ -13,7 +13,7 @@
 			</b-nav>
 
 			<b-button-group>
-				<b-button variant="outline-secondary" to="/user" class="py-2 px-4" id="user-page-button">
+				<b-button :variant="($router.currentRoute.fullPath.includes('/user') ? '' : 'outline-') + 'secondary'" to="/user" class="py-2 px-4" id="user-page-button">
 					{{ nickname }}
 				</b-button>
 
