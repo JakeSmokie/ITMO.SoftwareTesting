@@ -15,7 +15,7 @@ import {
 	signUpPassword,
 	trySignIn,
 	userPageButton,
-} from '../algorithms/auth';
+} from '../pages/auth';
 
 describe('auth page', () => {
 	let browser: WebDriver;
