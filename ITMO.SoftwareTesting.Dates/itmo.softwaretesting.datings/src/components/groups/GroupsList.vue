@@ -1,5 +1,5 @@
 <template>
-	<div class="pt-4 text-left" v-if="groups.length > 0">
+	<div class="pt-4 text-left" v-if="groups.length > 0" id="groups-list">
 		<h4 class="px-4">Мои группы:</h4>
 		<b-list-group class="pt-2">
 			<group-list-item :group="item" v-for="item in groups" :key="item.id"/>

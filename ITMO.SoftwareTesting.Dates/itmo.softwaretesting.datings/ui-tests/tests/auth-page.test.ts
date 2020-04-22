@@ -1,6 +1,6 @@
-import { createWebDriver, url } from '../utils/selenium';
+import { cleanLocalStorage, createWebDriver, url } from '../utils/selenium';
 import { until, WebDriver } from 'selenium-webdriver';
-import { toastText, ts } from '../utils/utils';
+import { assertToastText, ts } from '../utils/utils';
 import {
 	accountDeletionButton,
 	accountDeletionPassword,
@@ -25,9 +25,7 @@ describe('auth page', () => {
 	});
 
 	afterEach(async () => {
-		await browser.executeScript(() => {
-			localStorage.clear();
-		});
+		await cleanLocalStorage(browser);
 	});
 
 	afterAll(async () => {
@@ -94,7 +92,7 @@ describe('auth page', () => {
 		await logout(browser);
 		await trySignIn(browser, nickname, 'password_123_123');
 
-		expect(await toastText(browser)).toBe('Incorrect password');
+		await assertToastText(browser, 'Incorrect password');
 	});
 
 	it('should not allow sign in on empty nickname', async () => {
@@ -120,7 +118,7 @@ describe('auth page', () => {
 		await browser.wait(until.urlIs(url('auth')));
 
 		await trySignIn(browser, nickname, password);
-		expect(await toastText(browser)).toBe('No such user was found');
+		await assertToastText(browser, 'No such user was found');
 	});
 
 	it('should not allow to delete an account on wrong password', async () => {
@@ -131,7 +129,7 @@ describe('auth page', () => {
 		await accountDeletionPassword(browser).sendKeys('123');
 		await accountDeletionButton(browser).click();
 
-		expect(await toastText(browser)).toBe('Incorrect password');
+		await assertToastText(browser, 'Incorrect password');
 	});
 });
 

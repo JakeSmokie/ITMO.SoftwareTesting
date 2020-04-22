@@ -7,6 +7,7 @@
 					:key="link.link"
 					:active="$router.currentRoute.fullPath.includes(link.link)"
 					:to="link.link"
+					:id="'page-nav' + link.link"
 				>
 					{{ link.title }}
 				</b-nav-item>

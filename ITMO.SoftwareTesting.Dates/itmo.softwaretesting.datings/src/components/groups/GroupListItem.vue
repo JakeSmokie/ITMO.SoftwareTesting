@@ -1,15 +1,17 @@
 <template>
-	<div>
+	<div class="groups-list-item">
 		<b-list-group-item action v-on:click="switchSpoiler">
 			<b-row class="text-left align-items-center">
 				<b-col cols="3">
-					📖 Название: "{{ group.name }}"
+					📖 Название: "<span class="group-name">{{ group.name }}</span>"
 				</b-col>
 				<b-col>
-					🧭 Назначение: "{{ group.purpose }}"
+					🧭 Назначение: "<span class="group-purpose">{{ group.purpose }}</span>"
 				</b-col>
 				<b-col cols="auto" v-if="group.owner">
-					<b-button size="sm" variant="outline-danger" v-on:click="removeGroup">Удалить</b-button>
+					<b-button size="sm" variant="outline-danger" v-on:click="removeGroup" class="group-deletion-button">
+						Удалить
+					</b-button>
 				</b-col>
 			</b-row>
 		</b-list-group-item>
