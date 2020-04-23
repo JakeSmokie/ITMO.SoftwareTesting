@@ -6,7 +6,7 @@
 					v-for="[groupId, eventIds] in Object.entries(dates)" :key="groupId"
 					class="text-left p-4"
 				>
-					<h4>{{ (groups.find(x => x.id === +groupId) || {}).name }}</h4>
+					<h4 class="group-name">{{ (groups.find(x => x.id === +groupId) || {}).name }}</h4>
 
 					<b-list-group>
 						<b-list-group-item

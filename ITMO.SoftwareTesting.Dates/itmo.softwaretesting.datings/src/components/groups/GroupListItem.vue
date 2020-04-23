@@ -1,6 +1,6 @@
 <template>
 	<div class="groups-list-item">
-		<b-list-group-item action v-on:click="switchSpoiler">
+		<b-list-group-item action v-on:click="switchSpoiler" class="group-spoiler">
 			<b-row class="text-left align-items-center">
 				<b-col cols="3">
 					📖 Название: "<span class="group-name">{{ group.name }}</span>"
@@ -15,7 +15,7 @@
 				</b-col>
 			</b-row>
 		</b-list-group-item>
-		<b-list-group-item v-if="shown" class="text-left">
+		<b-list-group-item v-if="shown" class="text-left group-details">
 			<template v-if="group.owner">
 				<div>
 					<b-form-group label="📖 Название" label-cols="2">
@@ -44,9 +44,10 @@
 					<p>Члены группы:</p>
 					<ul>
 						<li v-for="user in group.members" :key="user.id">
-							{{ user.nickname }}
+							<span class="group-member">{{ user.nickname }}</span>
 							<b-button
-								size="sm" variant="outline-danger" class="py-0 ml-2"
+								size="sm" variant="outline-danger"
+								class="py-0 ml-2 group-member-deletion-button"
 								v-if="group.owner && !user.me"
 								v-on:click="deletePersonFromGroup({group: group.id, user: user.id})"
 							>
@@ -58,7 +59,7 @@
 					<template v-if="group.invites && group.invites.length > 0">
 						<p>Приглашенные в группу:</p>
 						<ul>
-							<li v-for="user in group.invites" :key="user.id">{{ user.nickname }}</li>
+							<li v-for="user in group.invites" :key="user.id" class="group-invitation">{{ user.nickname }}</li>
 						</ul>
 					</template>
 				</b-col>
@@ -68,6 +69,7 @@
 						v-model="nickname"
 						v-on:update="searchFieldChanged"
 						placeholder="Никнейм"
+						class="group-invitation-nickname"
 					/>
 
 					<datalist :id="$id('users-list-id')">
@@ -75,7 +77,7 @@
 					</datalist>
 
 					<b-button
-						class="mt-2"
+						class="mt-2 group-invitation-button"
 						v-on:click="inviteInGroup"
 						:disabled="!searchedUserId"
 						:variant="searchedUserId ? 'outline-primary' : 'outline-secondary'"

@@ -10,10 +10,10 @@ export const assertToastText = async (browser: WebDriver, text: string) => {
 	await browser.wait(until.elementTextIs(await browser.findElement(locator), text));
 };
 
-export async function mapAsync<T, U>(items: T[], selector: ((x: T) => U)) {
-	const newItems = [];
+export async function mapAsync<T, U>(items: Promise<T[]> | T[], selector: ((x: T) => Promise<U>)): Promise<U[]> {
+	const newItems: U[] = [];
 
-	for (const item of items) {
+	for (const item of await items) {
 		newItems.push(await selector(item));
 	}
 

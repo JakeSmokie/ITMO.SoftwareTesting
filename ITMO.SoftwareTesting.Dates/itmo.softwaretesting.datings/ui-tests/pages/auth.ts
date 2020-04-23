@@ -17,7 +17,7 @@ export const userPageButton = (browser: WebDriver) => browser.findElement(By.id(
 export const accountDeletionPassword = (browser: WebDriver) => browser.findElement(By.id('account-deletion-password'));
 export const accountDeletionButton = (browser: WebDriver) => browser.findElement(By.id('account-deletion-button'));
 
-export const signUp = async (browser: WebDriver, nickname: string, password: string) => {
+export const signUp = async (browser: WebDriver, nickname: string, password = 'RandomPassword') => {
 	await browser.get(url());
 
 	await signUpNickname(browser).sendKeys(nickname);

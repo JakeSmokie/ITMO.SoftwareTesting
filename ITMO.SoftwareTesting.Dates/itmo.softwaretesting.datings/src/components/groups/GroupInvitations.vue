@@ -3,16 +3,21 @@
 		<h4 class="px-4">Приглашения в группы:</h4>
 
 		<b-list-group class="pt-2">
-			<b-list-group-item v-for="group in invitations" :key="group.id">
+			<b-list-group-item v-for="group in invitations" :key="group.id" class="group-foreign-invitation">
 				<b-row class="text-left align-items-center">
 					<b-col cols="3">
-						📖 Название: "{{ group.name }}"
+						📖 Название: "<span class="group-name">{{ group.name }}</span>"
 					</b-col>
 					<b-col>
-						🧭 Назначение: "{{ group.purpose }}"
+						🧭 Назначение: "<span class="group-purpose">{{ group.purpose }}</span>"
 					</b-col>
 					<b-col cols="auto">
-						<b-button size="sm" variant="outline-primary" v-on:click="acceptInvitation(group)">Принять приглашение</b-button>
+						<b-button
+							size="sm" variant="outline-primary" v-on:click="acceptInvitation(group)"
+							class="group-invitation-acceptance-button"
+						>
+							Принять приглашение
+						</b-button>
 					</b-col>
 				</b-row>
 			</b-list-group-item>

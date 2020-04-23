@@ -9,6 +9,4 @@ export const createWebDriver = () =>
 		.build();
 
 export const cleanLocalStorage = (browser: WebDriver) =>
-	browser.executeScript(() => {
-		localStorage.clear();
-	});
+	browser.executeScript(() => window && localStorage && localStorage.clear());
