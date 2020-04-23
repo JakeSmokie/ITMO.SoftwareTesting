@@ -124,3 +124,6 @@ export const groupEditFormPurpose = (group: WebElement) =>
 
 export const groupEditFormSaveButton = (group: WebElement) =>
 	group.findElement(By.className('group-edit-form-save-button'));
+
+export const groupMemberDeletionButtons = (group: WebElement) =>
+	group.findElements(By.className('group-member-deletion-button'));

@@ -10,6 +10,7 @@ import {
 	groupForeignInvitations,
 	groupInvitationButton,
 	groupInvitations,
+	groupMemberDeletionButtons,
 	groupMembers,
 	groups,
 	groupsMainInfo,
@@ -174,6 +175,30 @@ describe('groups page', () => {
 
 			expect(await oneGroup(secondBrowser).then(x => groupDeletionButtonIsPresent(x))).toBe(false);
 			expect(await oneGroup(secondBrowser).then(x => groupEditFormIsPresent(x))).toBe(false);
+		}, 100000);
+
+		it('should allow to delete user from group', async () => {
+			const first = ts('first');
+			const second = ts('second');
+
+			await Promise.all([signUp(browser, first), signUp(secondBrowser, second)]);
+
+			let group = await createGroup(browser, 'F', 'F');
+			await inviteInGroupAndAccept(group, second, browser, secondBrowser);
+
+			await browser.navigate().refresh();
+			group = await oneGroup(browser);
+			await openGroup(group);
+
+			await groupMemberDeletionButtons(group).then(x => x[0].click());
+
+			await browser.navigate().refresh();
+			const members = await oneGroup(browser).then(async x => {
+				await openGroup(x);
+				return groupMembers(x);
+			});
+
+			expect(members).toStrictEqual([first]);
 		}, 100000);
 	});
 });
