@@ -2,13 +2,20 @@ import {
 	createGroup,
 	groupCreationButton,
 	groupDeletionButton,
+	groupDeletionButtonIsPresent,
+	groupEditFormIsPresent,
+	groupEditFormName,
+	groupEditFormPurpose,
+	groupEditFormSaveButton,
 	groupForeignInvitations,
 	groupInvitationButton,
 	groupInvitations,
 	groupMembers,
 	groups,
 	groupsMainInfo,
+	inviteInGroupAndAccept,
 	inviteUserInGroup,
+	namePurposeSelector,
 	oneGroup,
 	openGroup,
 	tryCreateGroup,
@@ -85,6 +92,28 @@ describe('groups page', () => {
 		expect(await groupInvitations(group, false)).toHaveLength(0);
 	});
 
+	it('should allow to edit group', async () => {
+		const newName = 'new name';
+		const newPurpose = 'new group';
+
+		await signUp(browser, ts('first'));
+
+		const group = await createGroup(browser, 'name', 'purpose');
+		await openGroup(group);
+
+		await groupEditFormName(group).clear();
+		await groupEditFormName(group).sendKeys(newName);
+		await groupEditFormPurpose(group).clear();
+		await groupEditFormPurpose(group).sendKeys(newPurpose);
+		await groupEditFormSaveButton(group).click();
+
+		await browser.navigate().refresh();
+		const {name, purpose} = await oneGroup(browser).then(x => namePurposeSelector(x));
+
+		expect(name).toBe(newName);
+		expect(purpose).toBe(newPurpose);
+	});
+
 	describe('two users groups page', () => {
 		let secondBrowser: WebDriver;
 
@@ -107,10 +136,7 @@ describe('groups page', () => {
 			const first = ts('first');
 			const second = ts('second');
 
-			await Promise.all([
-				signUp(browser, first),
-				signUp(secondBrowser, second),
-			]);
+			await Promise.all([signUp(browser, first), signUp(secondBrowser, second)]);
 
 			const group = await createGroup(browser, expectedName, expectedPurpose);
 			await inviteUserInGroup(group, second);
@@ -136,5 +162,18 @@ describe('groups page', () => {
 			expect(secondPurpose).toBe(expectedPurpose);
 			expect(new Set(members)).toStrictEqual(new Set([first, second]));
 		}, 1000000);
+
+		it('should not allow second user to delete or edit a group', async () => {
+			const first = ts('first');
+			const second = ts('second');
+
+			await Promise.all([signUp(browser, first), signUp(secondBrowser, second)]);
+
+			const group = await createGroup(browser, 'F', 'F');
+			await inviteInGroupAndAccept(group, second, browser, secondBrowser);
+
+			expect(await oneGroup(secondBrowser).then(x => groupDeletionButtonIsPresent(x))).toBe(false);
+			expect(await oneGroup(secondBrowser).then(x => groupEditFormIsPresent(x))).toBe(false);
+		}, 100000);
 	});
 });

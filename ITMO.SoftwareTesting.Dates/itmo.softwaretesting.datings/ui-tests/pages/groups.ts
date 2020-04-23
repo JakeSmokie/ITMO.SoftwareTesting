@@ -23,8 +23,10 @@ export const oneGroup = async (browser: WebDriver) => {
 };
 
 export const groupDeletionButton = (group: WebElement) => group.findElement(By.className('group-deletion-button'));
+export const groupDeletionButtonIsPresent = (group: WebElement) =>
+	group.findElements(By.className('group-deletion-button')).then(x => x.length === 1);
 
-const namePurposeSelector = async (x: WebElement) => ({
+export const namePurposeSelector = async (x: WebElement) => ({
 	name: await x.findElement(By.className('group-name')).getText(),
 	purpose: await x.findElement(By.className('group-purpose')).getText(),
 });
@@ -96,9 +98,29 @@ export const groupForeignInvitations = async (browser: WebDriver, wait: boolean)
 
 	return mapAsync(browser.findElements(locator), async x => ({
 		...await namePurposeSelector(x),
-		button: await x.findElement(By.className('group-invitation-acceptance-button'))
+		button: await x.findElement(By.className('group-invitation-acceptance-button')),
 	}));
 };
 
+export const inviteInGroupAndAccept = async (group: WebElement, nickname: string, firstBrowser: WebDriver, secondBrowser: WebDriver) => {
+	await inviteUserInGroup(group, nickname);
+	const {name} = await namePurposeSelector(group);
+	await groupInvitations(group, true);
 
+	await secondBrowser.get(url('groups'));
+	// @ts-ignore
+	const {button} = await groupForeignInvitations(secondBrowser, true).then(x => x.find(x => x.name === name));
+	await button.click();
+};
 
+export const groupEditFormIsPresent = (group: WebElement) =>
+	group.findElements(By.className('group-edit-form')).then(x => x.length === 1);
+
+export const groupEditFormName = (group: WebElement) =>
+	group.findElement(By.className('group-edit-form-name'));
+
+export const groupEditFormPurpose = (group: WebElement) =>
+	group.findElement(By.className('group-edit-form-purpose'));
+
+export const groupEditFormSaveButton = (group: WebElement) =>
+	group.findElement(By.className('group-edit-form-save-button'));

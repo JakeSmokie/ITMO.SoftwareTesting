@@ -17,12 +17,12 @@
 		</b-list-group-item>
 		<b-list-group-item v-if="shown" class="text-left group-details">
 			<template v-if="group.owner">
-				<div>
+				<div class="group-edit-form">
 					<b-form-group label="📖 Название" label-cols="2">
-						<b-input v-model="name"/>
+						<b-input v-model="name" class="group-edit-form-name"/>
 					</b-form-group>
 					<b-form-group label="🧭 Назначение" label-cols="2">
-						<b-input v-model="purpose"/>
+						<b-input v-model="purpose" class="group-edit-form-purpose"/>
 					</b-form-group>
 
 					<div class="d-flex justify-content-end">
@@ -30,6 +30,7 @@
 							v-on:click="saveGroup"
 							:disabled="name.trim() === '' || purpose.trim() === ''"
 							variant="outline-success"
+							class="group-edit-form-save-button"
 						>
 							💾 Сохранить изменения
 						</b-button>
