@@ -4,7 +4,7 @@
 			<b-col>
 				<div
 					v-for="[groupId, eventIds] in Object.entries(dates)" :key="groupId"
-					class="text-left p-4"
+					class="text-left p-4 group-dates-group"
 				>
 					<h4 class="group-name">{{ (groups.find(x => x.id === +groupId) || {}).name }}</h4>
 
@@ -14,6 +14,7 @@
 							action
 							v-on:click="selectEvent(event)"
 							:active="selectedEvent === event"
+							class="date-event"
 						>
 							{{ eventsDetails.find(x => x.id === event).title }}
 						</b-list-group-item>

@@ -1,6 +1,6 @@
 import { url } from '../utils/selenium';
 import { By, until, WebDriver } from 'selenium-webdriver';
-import { token } from '../utils/utils';
+import { token, ts } from '../utils/utils';
 
 export const logoutButton = (browser: WebDriver) => browser.findElement(By.id('logout-button'));
 export const signInNickname = (browser: WebDriver) => browser.findElement(By.id('sign-in-nickname'));
@@ -17,7 +17,7 @@ export const userPageButton = (browser: WebDriver) => browser.findElement(By.id(
 export const accountDeletionPassword = (browser: WebDriver) => browser.findElement(By.id('account-deletion-password'));
 export const accountDeletionButton = (browser: WebDriver) => browser.findElement(By.id('account-deletion-button'));
 
-export const signUp = async (browser: WebDriver, nickname: string, password = 'RandomPassword') => {
+export const signUp = async (browser: WebDriver, nickname = ts('RandomNick'), password = 'RandomPassword') => {
 	await browser.get(url());
 
 	await signUpNickname(browser).sendKeys(nickname);

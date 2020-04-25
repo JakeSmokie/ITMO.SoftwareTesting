@@ -6,14 +6,21 @@
 					variant="outline-primary"
 					v-on:click="$bvModal.show('create-date-modal')"
 					v-if="availableGroups.length > 0"
+					id="event-create-date-button"
 				>
 					Создать встречу
 				</b-button>
-				<b-button variant="outline-success" v-if="!isFavorite" v-on:click="move(true)">Добавить в любимые</b-button>
-				<b-button variant="outline-danger" v-else v-on:click="move(false)">Удалить из любимых</b-button>
+				<b-button
+					:variant="'outline-' + (isFavorite ? 'danger' : 'success')"
+					v-on:click="move(!isFavorite)"
+					id="event-fav-button"
+				>
+					{{ isFavorite ? 'Удалить из любимых' : 'Добавить в любимые' }}
+				</b-button>
 			</b-button-group>
 		</div>
 		<b-card
+			id="event-details-card"
 			:title="eventDetails.title"
 			:sub-title="eventDetails.tagline"
 			:img-src="eventDetails.images[0].image"

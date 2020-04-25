@@ -17,7 +17,7 @@
 					<b-list-group-item
 						v-for="event in events" :key="event.id"
 						href="#"
-						class="text-wrap text-left"
+						class="text-wrap text-left event-list-item"
 						v-on:click="selectEvent(event.id)"
 						:active="selectedEvent === event.id"
 					>

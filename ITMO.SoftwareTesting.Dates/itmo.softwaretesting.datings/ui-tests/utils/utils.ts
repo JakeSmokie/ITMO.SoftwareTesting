@@ -1,4 +1,4 @@
-import { By, until, WebDriver } from 'selenium-webdriver';
+import { By, until, WebDriver, WebElement } from 'selenium-webdriver';
 
 export const ts = (string: string) => string + '_' + +new Date();
 export const token = (browser: WebDriver) => browser.executeScript(() => localStorage.getItem('datings-token'));
@@ -19,3 +19,13 @@ export async function mapAsync<T, U>(items: Promise<T[]> | T[], selector: ((x: T
 
 	return newItems;
 }
+
+export const waitAndFindElement = async (browser: WebDriver, locator: By) => {
+	await browser.wait(until.elementLocated(locator));
+	return browser.findElement(locator);
+};
+
+export const selectElementAndText = async (element: WebElement) => ({
+	element,
+	text: await element.getText(),
+});

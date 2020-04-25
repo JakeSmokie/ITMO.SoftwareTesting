@@ -12,6 +12,7 @@
 				v-for="group in availableGroups" :key="group.id"
 				:active="selectedGroup === group.id"
 				@click="selectedGroup = group.id"
+				class="modal-group"
 			>
 				{{ group.name }}
 			</b-list-group-item>
@@ -25,6 +26,7 @@
 				<b-button
 					variant="outline-success" class="mt-3" :disabled="!selectedGroup"
 					@click="createDate([selectedGroup, selectedEvent]), $bvModal.hide('create-date-modal')"
+					id="modal-create-date-button"
 				>
 					Создать
 				</b-button>
