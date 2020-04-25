@@ -69,6 +69,7 @@ export const eventsModule = {
 		},
 
 		async loadEvents({commit, dispatch}, [category, location] = []) {
+			commit('loadEvents', []);
 			const events = await listEvents(location, category);
 
 			commit('loadEvents', events);

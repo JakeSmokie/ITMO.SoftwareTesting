@@ -1,5 +1,7 @@
 <template>
 	<div v-if="eventDetails">
+		<span style="display: none" class="event-category" v-for="category in eventDetails.categories" :key="category" :text="category"/>
+		<span style="display: none" id="event-location" :text="eventDetails.location && eventDetails.location.slug"/>
 		<div class="d-flex justify-content-end">
 			<b-button-group class="mb-3">
 				<b-button

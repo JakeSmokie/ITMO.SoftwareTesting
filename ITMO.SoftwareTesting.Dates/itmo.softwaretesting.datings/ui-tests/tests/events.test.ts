@@ -1,7 +1,15 @@
-import { until, WebDriver } from 'selenium-webdriver';
+import { WebDriver } from 'selenium-webdriver';
 import { cleanLocalStorage, createWebDriver, url } from '../utils/selenium';
 import { signUp } from '../pages/auth';
-import { eventCreateDateButtonIsPresent, eventFavButton, events, eventTitle } from '../pages/events';
+import {
+	eventCategories,
+	eventCreateDateButtonIsPresent,
+	eventFavButton, eventLocation,
+	events,
+	eventTitle,
+	secondCategoryInFilter, secondLocationInFilter,
+} from '../pages/events';
+import { mapAsync } from '../utils/utils';
 
 describe('favorite events', () => {
 	let browser: WebDriver;
@@ -66,5 +74,49 @@ describe('favorite events', () => {
 
 		expect(afterAdd).toContain(text);
 		expect(afterRemove).not.toContain(text);
+	});
+
+	describe('filters', () => {
+		it('should filter out events by categories', async () => {
+			await signUp(browser);
+			await browser.get(url('events'));
+			await events(browser);
+
+			const option = await secondCategoryInFilter(browser);
+			await option.click();
+			const category = await option.getAttribute('value');
+
+			const categories = await mapAsync(
+				await events(browser),
+				async x => {
+					await x.element.click();
+					return eventCategories(browser);
+				},
+			);
+
+			for (const actual of categories) {
+				expect(actual).toContain(category);
+			}
+		}, 120000);
+
+		it('should filter out events by location', async () => {
+			await signUp(browser);
+			await browser.get(url('events'));
+			await events(browser);
+
+			const option = await secondLocationInFilter(browser);
+			await option.click();
+			const location = await option.getAttribute('value');
+
+			const locations = await mapAsync(
+				await events(browser),
+				async x => {
+					await x.element.click();
+					return eventLocation(browser);
+				},
+			);
+
+			expect(new Set(locations.filter(x => x !== 'online'))).toStrictEqual(new Set([location]));
+		}, 120000);
 	});
 });

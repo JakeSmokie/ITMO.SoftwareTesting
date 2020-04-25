@@ -1,5 +1,5 @@
-import { By, until, WebDriver, WebElement } from 'selenium-webdriver';
-import { mapAsync, selectElementAndText, waitAndFindElement } from '../utils/utils';
+import { By, until, WebDriver } from 'selenium-webdriver';
+import { mapAsync, selectElementAndText, waitAndFindElement, waitAndFindElements } from '../utils/utils';
 
 export const events = async (browser: WebDriver, wait = true) => {
 	if (wait) {
@@ -24,3 +24,25 @@ export const eventFavButton = (browser: WebDriver) =>
 export const eventTitle = (browser: WebDriver) =>
 	waitAndFindElement(browser, By.id('event-details-card'))
 		.then(x => x.findElement(By.className('card-title')).getText());
+
+export const eventCategories = (browser: WebDriver) =>
+	waitAndFindElements(browser, By.className('event-category'))
+		.then(x => mapAsync(x, x => x.getAttribute('text')));
+
+export const eventLocation = (browser: WebDriver) =>
+	waitAndFindElement(browser, By.id('event-location')).then(x => x.getAttribute('text'));
+
+export const secondCategoryInFilter = async (browser: WebDriver) => {
+	const locator = By.xpath('//*[@id="category-filter"]/option');
+
+	await browser.wait(until.elementsLocated(locator));
+	return browser.findElements(locator).then(([, x]) => x);
+};
+
+export const secondLocationInFilter = async (browser: WebDriver) => {
+	const locator = By.xpath('//*[@id="location-filter"]/option');
+
+	await browser.wait(until.elementsLocated(locator));
+	return browser.findElements(locator).then(([, x]) => x);
+};
+

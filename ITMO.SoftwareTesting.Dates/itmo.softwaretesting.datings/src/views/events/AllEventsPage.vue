@@ -3,11 +3,21 @@
 		<b-row class="mb-4">
 			<b-col>
 				<div class="mb-2">Категория</div>
-				<b-form-select v-model="selectedCategory" :options="categoriesOptions" v-on:change="updateEvents"/>
+				<b-form-select
+					v-model="selectedCategory"
+					:options="categoriesOptions"
+					v-on:change="updateEvents"
+					id="category-filter"
+				/>
 			</b-col>
 			<b-col>
 				<div class="mb-2">Город</div>
-				<b-form-select v-model="selectedLocation" :options="locationsOptions" v-on:change="updateEvents"/>
+				<b-form-select
+					v-model="selectedLocation"
+					:options="locationsOptions"
+					v-on:change="updateEvents"
+					id="location-filter"
+				/>
 			</b-col>
 		</b-row>
 

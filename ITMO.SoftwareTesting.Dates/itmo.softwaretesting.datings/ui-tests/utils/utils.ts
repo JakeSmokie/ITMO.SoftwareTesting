@@ -25,6 +25,11 @@ export const waitAndFindElement = async (browser: WebDriver, locator: By) => {
 	return browser.findElement(locator);
 };
 
+export const waitAndFindElements = async (browser: WebDriver, locator: By) => {
+	await browser.wait(until.elementLocated(locator));
+	return browser.findElements(locator);
+};
+
 export const selectElementAndText = async (element: WebElement) => ({
 	element,
 	text: await element.getText(),
