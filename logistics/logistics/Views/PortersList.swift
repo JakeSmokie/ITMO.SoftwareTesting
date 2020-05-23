@@ -11,6 +11,7 @@ import CoreData
 
 struct PortersList: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: PorterDocument.entity(), sortDescriptors: []) var entityNames: FetchedResults<PorterDocument>
     @EnvironmentObject var appState: AppState
     
     @State var modalShown = false
@@ -21,30 +22,50 @@ struct PortersList: View {
                 if appState.porters.count > 0 {
                     List {
                         ForEach(appState.porters) { porter in
-                            NavigationLink(destination: PorterEditForm(porter: porter, onSaved: self.updatePorter)) {
+                            NavigationLink(
+                                destination: PorterEditForm(porter: porter, onSaved: self.updatePorter)
+                                    .navigationBarTitle("\(porter.name)", displayMode: .inline)
+                            ) {
                                 PortersListItem(porter: porter)
                             }
                         }
                         .onDelete(perform: deletePorter)
                     }
+                    .accessibility(identifier: "Porters List")
                 } else {
                     Spacer()
                     Text("No porters were found.\nAdd some")
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 50)
                         .font(.title)
+                        .accessibility(identifier: "No porters text")
                     Spacer()
                 }
             }
-            .navigationBarItems(trailing:
-                HStack {
-                    Button(action: {self.modalShown.toggle()}) {
+            .navigationBarItems(
+                leading: Button(action: {
+                    for entityName in self.entityNames { self.managedObjectContext.delete(entityName) }
+                    try? self.managedObjectContext.save()
+                    
+                    self.appState.porters = []
+                }) {
+                    Text("Clear").foregroundColor(.red)
+                },
+                trailing: HStack {
+                    NavigationLink(
+                        destination: PorterEditForm(porter: Porter(), onSaved: self.createPorter)
+                            .navigationBarTitle("New porter", displayMode: .inline)
+                            .environmentObject(self.appState)
+                    ) {
                         Text("Add")
                     }
-                    .sheet(isPresented: $modalShown) {
-                        PorterEditForm(porter: Porter(), onSaved: self.createPorter)
-                            .environmentObject(self.appState)
-                    }
+                    //                    Button(action: {self.modalShown.toggle()}) {
+                    //                        Text("Add")
+                    //                    }
+                    //                    .sheet(isPresented: $modalShown) {
+                    //                        PorterEditForm(porter: Porter(), onSaved: self.createPorter)
+                    //                            .environmentObject(self.appState)
+                    //                    }
                 }
             )
             .navigationBarTitle("Porters", displayMode: .inline)

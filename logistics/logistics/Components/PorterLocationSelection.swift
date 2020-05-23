@@ -32,8 +32,10 @@ struct PorterLocationSelection: View {
                     .offset(y: -100)
                     .font(.title)
                     .padding()
+                    .accessibility(identifier: "Map address")
             }
-        }.padding(.vertical)
+        }
+        .padding(.vertical)
     }
 }
 

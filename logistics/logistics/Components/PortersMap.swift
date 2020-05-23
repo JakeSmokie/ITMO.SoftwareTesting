@@ -25,6 +25,7 @@ struct PortersMap: UIViewRepresentable {
             annotation.coordinate = CLLocationCoordinate2D(latitude: porter.latitude, longitude: porter.longitude)
             annotation.title = porter.name
             annotation.subtitle = porter.contact
+            annotation.accessibilityLabel = "mapMarker"
             
             mapView.addAnnotation(annotation)
         }

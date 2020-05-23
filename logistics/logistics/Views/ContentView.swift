@@ -24,23 +24,25 @@ struct ContentView: View {
     @State var showMapAlert = false
     
     var body: some View {
-        TabView {
-            PortersList()
-                .tabItem({
-                    Image(systemName: "cloud")
-                    Text("Admin Panel")
-                }).tag(0)
-            
-            PortersMap()
-                .tabItem({
-                    Image(systemName: "play")
-                    Text("User Menu")
-                }).tag(1)
-        }
-        .onAppear {
-            let dbPorters = PorterDocument.toUIPorters(porters: self.porters)
-            
-            self.appState.porters = dbPorters
+        VStack {
+            TabView {
+                PortersList()
+                    .tabItem({
+                        Image(systemName: "cloud")
+                        Text("Admin Panel")
+                    }).tag(0)
+                
+                PortersMap()
+                    .tabItem({
+                        Image(systemName: "play")
+                        Text("User Menu")
+                    }).tag(1)
+            }
+            .onAppear {
+                let dbPorters = PorterDocument.toUIPorters(porters: self.porters)
+                
+                self.appState.porters = dbPorters
+            }
         }
     }
     

@@ -38,8 +38,7 @@ struct PorterEditForm: View {
             Form {
                 Section {
                     TextField("Name", text: $name)
-                    TextField("Phone", text: $phone)
-                        .keyboardType(.phonePad)
+                    TextField("Contact", text: $phone)
                 }
                 
                 Section {
@@ -52,7 +51,7 @@ struct PorterEditForm: View {
                     }.edgesIgnoringSafeArea(.all)
 
                     if self.address != "" {
-                        Text(self.address)
+                        Text(self.address).accessibility(identifier: "Address")
                         Text("\(self.coords.latitude) \(self.coords.longitude)")
                     }
                 }
@@ -60,8 +59,8 @@ struct PorterEditForm: View {
                 Section {
                     Button(action: savePorter) {
                         Text("Save")
-                            .disabled(isFormInvalid())
                     }
+                    .disabled(isFormInvalid())
                 }
             }
         }
